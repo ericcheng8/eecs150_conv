@@ -16,7 +16,7 @@ IMPULSE_WAV = AUD_SRC + "/" + "impulse_response.wav"  # Ensure you have a valid 
 
 def record_audio(filename, duration, fs):
     audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype=np.float32)
-    print("Recording audio in 2 seconds...")
+    print("Recording audio in 3 seconds...")
     sd.wait()
     
     audio_data = (audio_data * 32767).astype(np.int16)  # Convert to 16-bit PCM
