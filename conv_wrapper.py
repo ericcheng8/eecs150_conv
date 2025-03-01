@@ -6,13 +6,14 @@ import winsound
 import os
 import time
 
-# Audio parameters
+
 FS = 44100  # Sampling rate
-DURATION = 5  # Duration of recording in seconds
+DURATION = 5  # Duration of recording (sec)
 AUD_SRC = "audio_src"
 INPUT_WAV = AUD_SRC + "/" + "input.wav"
 OUTPUT_WAV = AUD_SRC + "/" + "output.wav"
-IMPULSE_WAV = AUD_SRC + "/" + "impulse_response.wav"  # Ensure you have a valid impulse response file
+IMPULSE_WAV = AUD_SRC + "/" + "impulse_response.wav"
+
 
 def record_audio(filename, duration, fs):
     audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype=np.float32)
@@ -29,23 +30,28 @@ def record_audio(filename, duration, fs):
 
 def play_audio(filename):
     print("Playing convolved audio...")
-    winsound.PlaySound(filename, winsound.SND_FILENAME)  # Windows
+    winsound.PlaySound(filename, winsound.SND_FILENAME)
 
-# Start MATLAB Engine
-print("Starting MATLAB engine...")
-eng = matlab.engine.start_matlab()
+def main():
+  print("Starting MATLAB engine...")
+  eng = matlab.engine.start_matlab()
 
-# Record input audio
-record_audio(INPUT_WAV, DURATION, FS)
+  record_audio(INPUT_WAV, DURATION, FS)
 
-# Call MATLAB function
-print("Calling MATLAB function for convolution...")
-output_path = os.getcwd() + "/" + AUD_SRC
-eng.convolute_wav(INPUT_WAV, IMPULSE_WAV, output_path, nargout=0)
+  print("Calling MATLAB function for convolution...")
+  output_path = os.getcwd() + "/" + AUD_SRC
+  eng.convolute_wav(INPUT_WAV, IMPULSE_WAV, output_path, nargout=0)
 
-time.sleep(2)
+  time.sleep(2)
 
-play_audio(OUTPUT_WAV)
+  play_audio(OUTPUT_WAV)
 
-eng.quit()
-print("Finished.")
+  eng.quit()
+  print("Finished.")
+
+
+
+
+
+if __name__ == "__main__":
+    main()
